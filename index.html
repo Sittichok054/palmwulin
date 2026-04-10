@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palmwulin | Personal Space & Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background: radial-gradient(circle at top left, #1e1b4b, #000000);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+        .logo-font { font-family: 'Cinzel', serif; }
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .link-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .link-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px -10px rgba(168, 85, 247, 0.5);
+        }
+        .hidden-section { display: none; }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide { animation: slideIn 0.8s ease-out forwards; }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center p-4 min-h-screen">
+
+    <!-- Background Elements -->
+    <div class="fixed top-0 left-0 w-full h-full -z-10">
+        <div class="absolute top-[10%] left-[20%] w-72 h-72 bg-purple-600/10 rounded-full blur-[100px]"></div>
+        <div class="absolute bottom-[10%] right-[20%] w-96 h-96 bg-blue-600/10 rounded-full blur-[100px]"></div>
+    </div>
+
+    <!-- 1. Auth Section (Sign Up / Login) -->
+    <div id="auth-section" class="w-full max-w-md animate-slide">
+        <div class="text-center mb-8">
+            <h1 class="logo-font text-5xl font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
+                PALMWULIN
+            </h1>
+            <p id="auth-title" class="text-gray-400 mt-2 text-xs uppercase tracking-[0.3em]">Identity Authentication Required</p>
+        </div>
+
+        <div class="glass p-8 rounded-[2.5rem] shadow-2xl">
+            <!-- Tabs (Force Signup first) -->
+            <div class="flex mb-8 bg-white/5 rounded-2xl p-1">
+                <button onclick="toggleAuthMode('signup')" id="btn-signup-tab" class="flex-1 py-2 rounded-xl text-sm font-bold transition-all bg-white/10 shadow-lg">Register</button>
+                <button onclick="toggleAuthMode('login')" id="btn-login-tab" class="flex-1 py-2 rounded-xl text-sm font-bold transition-all text-gray-400">Login</button>
+            </div>
+
+            <div class="space-y-5">
+                <div id="field-name">
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase mb-2 ml-1">Master Name</label>
+                    <input type="text" id="reg-name" placeholder="Enter your display name" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3 outline-none focus:border-purple-500/50 transition-all">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase mb-2 ml-1">Email Address</label>
+                    <input type="email" id="email" placeholder="example@mail.com" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3 outline-none focus:border-purple-500/50 transition-all">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase mb-2 ml-1">Secret Key / Admin Pass</label>
+                    <input type="password" id="password" placeholder="••••••••" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3 outline-none focus:border-purple-500/50 transition-all">
+                </div>
+                
+                <button onclick="handleSubmit()" id="auth-submit-btn" class="w-full bg-gradient-to-r from-purple-600 to-blue-600 py-4 rounded-2xl font-bold text-sm uppercase tracking-widest hover:scale-[1.02] transition-transform active:scale-95 shadow-lg shadow-purple-500/20">
+                    Join the Realm
+                </button>
+
+                <p class="text-[10px] text-center text-gray-500 mt-4 leading-relaxed uppercase tracking-wider">
+                    Registration is mandatory for access.<br>
+                    <span class="text-purple-400">Admin access uses a specific master key.</span>
+                </p>
+            </div>
+            
+            <p id="auth-msg" class="mt-4 text-center text-[10px] text-red-400 h-4 uppercase tracking-tighter"></p>
+        </div>
+    </div>
+
+    <!-- 2. Dashboard / Portal Section -->
+    <div id="portal-section" class="hidden-section w-full max-w-lg animate-slide text-center">
+        <div class="mb-10">
+            <div id="admin-badge" class="hidden-section bg-purple-500/20 text-purple-400 text-[10px] font-bold py-1 px-3 rounded-full inline-block mb-2 border border-purple-500/30 uppercase tracking-[0.2em]">Master Admin</div>
+            <div class="w-24 h-24 bg-gradient-to-tr from-purple-500 to-blue-500 rounded-full mx-auto mb-4 border-4 border-white/10 p-1">
+                <div class="w-full h-full rounded-full bg-black flex items-center justify-center logo-font text-3xl">PW</div>
+            </div>
+            <h2 id="welcome-user" class="text-3xl font-bold mb-1">Palmwulin Portal</h2>
+            <p class="text-gray-400 text-sm italic">Connecting my worlds together.</p>
+        </div>
+
+        <div class="space-y-4">
+            <!-- Social Links -->
+            <a href="https://www.facebook.com/palmkungzat" target="_blank" class="link-card block glass p-5 rounded-[1.5rem] flex items-center">
+                <div class="w-12 h-12 bg-[#1877F2]/20 rounded-xl flex items-center justify-center mr-4 text-[#1877F2]">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                </div>
+                <div class="text-left">
+                    <p class="font-bold text-lg">Facebook</p>
+                    <p class="text-xs text-gray-500">ติดตามชีวิตประจำวันของผม</p>
+                </div>
+            </a>
+
+            <a href="https://www.instagram.com/palmkungz/" target="_blank" class="link-card block glass p-5 rounded-[1.5rem] flex items-center">
+                <div class="w-12 h-12 bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] rounded-xl flex items-center justify-center mr-4 text-white">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </div>
+                <div class="text-left">
+                    <p class="font-bold text-lg">Instagram</p>
+                    <p class="text-xs text-gray-500">ดูรูปสวยๆ และผลงานล่าสุด</p>
+                </div>
+            </a>
+
+            <a href="https://discord.gg/V42cuJ4n9W" target="_blank" class="link-card block glass p-5 rounded-[1.5rem] flex items-center">
+                <div class="w-12 h-12 bg-[#5865F2]/20 rounded-xl flex items-center justify-center mr-4 text-[#5865F2]">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+                </div>
+                <div class="text-left">
+                    <p class="font-bold text-lg">Discord</p>
+                    <p class="text-xs text-gray-500">เข้ามาพูดคุยกันในคอมมูนิตี้</p>
+                </div>
+            </a>
+
+            <a href="aquasilvia2547@gmail.com" class="link-card block glass p-5 rounded-[1.5rem] flex items-center">
+                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                </div>
+                <div class="text-left">
+                    <p class="font-bold text-lg">Contact Work</p>
+                    <p class="text-xs text-gray-500">สำหรับติดต่องานหรือร่วมโปรเจกต์</p>
+                </div>
+            </a>
+        </div>
+
+        <button onclick="handleLogout()" class="mt-12 text-xs uppercase tracking-widest text-gray-500 hover:text-white transition-colors underline decoration-purple-500 underline-offset-8">Exit Realm</button>
+    </div>
+
+    <script>
+        // --- ADMIN CONFIGURATION ---
+        const MASTER_ADMIN_KEY = "admin1234"; // รหัสแอดมินที่คุณสามารถแก้ไขได้
+        const MASTER_ADMIN_EMAIL = "admin@palmwulin.com"; 
+
+        let isLoginMode = false; // บังคับให้เริ่มที่หน้าสมัครสมาชิก
+        let registeredUsers = []; // ในโปรเจกต์จริงจะใช้ฐานข้อมูล
+
+        function toggleAuthMode(mode) {
+            isLoginMode = mode === 'login';
+            const authTitle = document.getElementById('auth-title');
+            const submitBtn = document.getElementById('auth-submit-btn');
+            const nameField = document.getElementById('field-name');
+            const loginTab = document.getElementById('btn-login-tab');
+            const signupTab = document.getElementById('btn-signup-tab');
+
+            if (isLoginMode) {
+                authTitle.innerText = "Identity Verification Required";
+                submitBtn.innerText = "Sign In";
+                nameField.classList.add('hidden-section');
+                loginTab.classList.add('bg-white/10', 'shadow-lg');
+                loginTab.classList.remove('text-gray-400');
+                signupTab.classList.remove('bg-white/10', 'shadow-lg');
+                signupTab.classList.add('text-gray-400');
+            } else {
+                authTitle.innerText = "Register to enter the realm";
+                submitBtn.innerText = "Create Identity";
+                nameField.classList.remove('hidden-section');
+                signupTab.classList.add('bg-white/10', 'shadow-lg');
+                signupTab.classList.remove('text-gray-400');
+                loginTab.classList.remove('bg-white/10', 'shadow-lg');
+                loginTab.classList.add('text-gray-400');
+            }
+        }
+
+        function handleSubmit() {
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
+            const msg = document.getElementById('auth-msg');
+
+            // --- ADMIN BYPASS LOGIC ---
+            if (pass === MASTER_ADMIN_KEY && (email === MASTER_ADMIN_EMAIL || email.includes('admin'))) {
+                showPortal("Master Palmwulin", true);
+                return;
+            }
+
+            if (!email || !pass || (!isLoginMode && !name)) {
+                showError("Please fulfill all credentials.");
+                return;
+            }
+
+            if (!isLoginMode) {
+                // Register Logic
+                if (pass.length < 6) {
+                    showError("Secret key must be at least 6 characters.");
+                    return;
+                }
+                // Simulate saving user
+                registeredUsers.push({ name, email, pass });
+                msg.classList.replace('text-red-400', 'text-green-400');
+                msg.innerText = "Registration successful! Please login.";
+                setTimeout(() => { toggleAuthMode('login'); msg.innerText = ""; }, 1500);
+            } else {
+                // Login Logic
+                const user = registeredUsers.find(u => u.email === email && u.pass === pass);
+                if (user) {
+                    showPortal(user.name, false);
+                } else {
+                    showError("Invalid identity or unauthorized access.");
+                }
+            }
+        }
+
+        function showPortal(displayName, isAdmin) {
+            const msg = document.getElementById('auth-msg');
+            msg.classList.replace('text-red-400', 'text-green-400');
+            msg.innerText = isAdmin ? "Master Admin Authenticated..." : "Identity Verified...";
+            
+            setTimeout(() => {
+                document.getElementById('auth-section').classList.add('hidden-section');
+                const portal = document.getElementById('portal-section');
+                const welcome = document.getElementById('welcome-user');
+                const adminBadge = document.getElementById('admin-badge');
+                
+                welcome.innerText = "Welcome, " + displayName;
+                if (isAdmin) adminBadge.classList.remove('hidden-section');
+                
+                portal.classList.remove('hidden-section');
+            }, 1000);
+        }
+
+        function showError(text) {
+            const msg = document.getElementById('auth-msg');
+            msg.classList.replace('text-green-400', 'text-red-400');
+            msg.innerText = text;
+            setTimeout(() => { msg.innerText = ""; }, 3000);
+        }
+
+        function handleLogout() {
+            location.reload();
+        }
+
+        // Initialize with Register mode
+        toggleAuthMode('signup');
+    </script>
+</body>
+</html>
